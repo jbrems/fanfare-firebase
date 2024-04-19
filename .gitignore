@@ -1,6 +1,8 @@
+.firebase/
 .next/
 node_modules/
 
 fanfaars-firebase.config.mjs
+firebase-debug.log
 firebase.config.mjs
 next-env.d.ts
