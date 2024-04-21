@@ -28,5 +28,5 @@ export default function SigninPage() {
     return unsubscribe
   })
 
-  return <span>Aanmeldprocedure wordt gestart...</span>
+  return <span>Aanmeldprocedure wordt uitgevoerd...</span>
 }
