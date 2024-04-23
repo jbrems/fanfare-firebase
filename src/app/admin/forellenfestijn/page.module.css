@@ -1,0 +1,33 @@
+.arrivalStats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+
+  &:nth-of-type(7) {
+    margin-bottom: 32px;
+  }
+
+  & .stats {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    & .stat {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+
+      & .reservationsBar {
+        height: 10px;
+        background-color: green;
+      }
+    
+      & .dishesBar {
+        height: 10px;
+        background-color: darkblue;
+      }
+    }
+  }
+}
