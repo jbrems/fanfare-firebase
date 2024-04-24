@@ -1,0 +1,22 @@
+.header {
+  display: flex;
+  height: 50px;
+  background-color: darkred;
+  color: whitesmoke;
+  
+  & > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    height: 100%;
+    padding: 0 3em;
+    
+    color: whitesmoke !important;
+    text-decoration: none;
+  }
+
+  & .spacer {
+    flex-grow: 1;
+  }
+}
