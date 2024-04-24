@@ -1,0 +1,20 @@
+.album {
+  display: flex;
+  gap: 2em;
+  margin-bottom: 3em;
+
+  & img {
+    max-height: 100px;
+    max-width: 100px;
+  }
+
+  & .info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+
+    & .title {
+      font-weight: bold;
+    }
+  }
+}

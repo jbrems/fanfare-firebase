@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header } from "./(layout)/(header)/Header";
 import { Footer } from "./(layout)/(footer)/Footer";
 
-const roboto = Roboto({ weight: ['300'], subsets: ["latin"] });
+const roboto = Roboto({ weight: ['300', '700'], subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Fanfare Blaasveld",
