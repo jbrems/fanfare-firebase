@@ -7,6 +7,7 @@ export function Header() {
     <Link href="/">Home</Link>
     <Link href="/admin/forellenfestijn">Forellenfestijn</Link>
     <Link href="/admin/photoalbums">Foto albums</Link>
+    <Link href="/admin/activities">Activiteiten</Link>
     <div className={styles.spacer}></div>
     <AuthActions />
   </header>

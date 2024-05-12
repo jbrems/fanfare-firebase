@@ -1,14 +1,21 @@
+import { collection, getDocs } from "firebase/firestore"
 import PhotoAlbum, { Album } from "./PhotoAlbum"
+import { db } from "@/lib/firebase"
 
 export default async function PhotoAlbumsPage() {
   const categories = await fetchCategories()
   const filteredCategories = categories.filter(c => c.nb_images > 1)
   const albums = filteredCategories.map(mapCategoryToAlbum)
+  const existingAlbums = await fetchPhotoAlbums()
+
+  function exists(album: Album): boolean {
+    return existingAlbums.some(a => a.id === album.id)
+  }
 
   return <div>
     <h1>Fotoalbum beheer</h1>
     <ul>
-      {albums.map(album => <PhotoAlbum key={album.id} album={album} />)}
+      {albums.map(album => <PhotoAlbum key={album.id} album={album} exists={exists(album)} />)}
     </ul>
   </div>
 }
@@ -29,11 +36,30 @@ async function fetchCategories(): Promise<PiwigoCategory[]> {
 
 function mapCategoryToAlbum(c: PiwigoCategory): Album {
   return {
-    id: c.name.replaceAll(' ', '-'),
-    title: c.name.replace(/^(FF|MM) \d{8} /, ''),
-    url: c.url,
-    thumbnail: c.tn_url,
-    date: c.name.substring(3, 11),
-    group: c.name.substring(0, 2) as 'FF' | 'MM'
+    ...parseName(c.name),
+    url: `${c.url}&display=medium`,
+    image: c.tn_url,
   }
+}
+
+function parseName(name: string): Pick<Album, 'id' | 'title' | 'date' | 'group'> {
+  const id = name.replaceAll(' ', '-').replaceAll('"', '')
+
+  const parsed = /^(FF|MM) (\d*) (.*)$/.exec(name)
+  if (!parsed) {
+    console.warn('Failed to parse name', name)
+    return { id, title: name, group: 'FF', date: 'unknown' }
+  }
+
+  let [_, group, date, title] = parsed
+
+  date = date.padEnd(8, '0')
+  date = `${date.substring(0, 4)}-${date.substring(4, 6)}-${date.substring(6)}`
+
+  return { id, title, group: group as Album['group'], date }
+}
+
+async function fetchPhotoAlbums() {
+  const querySnapshot = await getDocs(collection(db, "photoalbums"));
+  return querySnapshot.docs.map((res) => ({ ...res.data(), id: res.id }));
 }

@@ -28,6 +28,17 @@
         height: 10px;
         background-color: darkblue;
       }
+
+      &.names {
+        margin-top: 2px;
+        visibility: hidden;
+        white-space: nowrap;
+      }
+    }
+
+    &:hover .names {
+      visibility: visible;
+      white-space: initial;
     }
   }
 }

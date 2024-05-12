@@ -8,6 +8,7 @@ import styles from './page.module.css'
 
 interface Reservation {
   id: string
+  name: string
   arrival: string
   menu: {
     melon: string | 0
@@ -23,7 +24,7 @@ interface Reservation {
 
 export default function ForellenFestijnAdminPage() {
   const [reservations, setReservations] = useState<Reservation[]>([])
-  const [year, setYear] = useState<'2023' | '2024'>('2024')
+  const [year, setYear] = useState<string>('2024')
   
   useEffect(() => {
     console.log('Fetching reservations')
@@ -52,15 +53,15 @@ async function getReservations(): Promise<Reservation[]> {
   return querySnapshot.docs.map((res) => ({ ...res.data(), id: res.id })) as Reservation[];
 }
 
-function filterReservationsByYear(reservation: Reservation, year: '2023' | '2024'): boolean {
+function filterReservationsByYear(reservation: Reservation, year: string): boolean {
   return reservation.id.includes(`_${year}-`)
 }
 
 function countByArrival(reservations: Reservation[]) {
-  return reservations.reduce((result: { [arrival: string]: { reservations: number, dishes: number } }, reservation) => {
+  return reservations.reduce((result: { [arrival: string]: { reservations: number, dishes: number, names: string[] } }, reservation) => {
     const arrival = reservation.arrival
-    if (!result[arrival]) result[arrival] = { reservations: 0, dishes: 0 }
-    return { ...result, [arrival]: { reservations: result[arrival].reservations + 1, dishes: result[arrival].dishes + countDishes(reservation) }}
+    if (!result[arrival]) result[arrival] = { reservations: 0, dishes: 0, names: [] }
+    return { ...result, [arrival]: { reservations: result[arrival].reservations + 1, dishes: result[arrival].dishes + countDishes(reservation), names: [...result[arrival].names, reservation.name] }}
   }, {})
 }
 
@@ -73,7 +74,7 @@ function countDishes(reservation: Reservation): number {
     Number(reservation.menu.volAuVentChild)
 }
 
-function ArrivalStats({ arrival, stats }: { arrival: string, stats: { reservations: number, dishes: number } }) {
+function ArrivalStats({ arrival, stats }: { arrival: string, stats: { reservations: number, dishes: number, names: string[] } }) {
   return <div className={styles.arrivalStats}>
     <div>{arrival}</div>
     <div className={styles.stats}>
@@ -85,6 +86,7 @@ function ArrivalStats({ arrival, stats }: { arrival: string, stats: { reservatio
         <div className={styles.dishesBar} style={{width: stats.dishes * 10 + 'px'}}></div>
         <div>{stats.dishes} gerechten</div>
       </div>
+      <div className={`${styles.stat} ${styles.names}`}>{stats.names.join(', ')}</div>
     </div>
   </div>
 }

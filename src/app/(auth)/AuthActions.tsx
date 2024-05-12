@@ -12,7 +12,7 @@ export default function AuthActions() {
   }
 
   return <div className={styles.authActions}>
-    <img className={styles.profilePicture} src={user.photoURL} aria-hidden />
+    <img className={styles.profilePicture} src={user.photoURL || undefined} aria-hidden />
     <span>{user.displayName}</span>
     <span className={styles.logoutLink}>(<Link href="/signout">logout</Link>)</span>
   </div>
